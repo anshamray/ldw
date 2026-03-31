@@ -224,9 +224,12 @@ cd ~
 git clone https://github.com/hzeller/rpi-rgb-led-matrix.git
 cd rpi-rgb-led-matrix
 
-# Build the library and Python bindings
-make build-python PYTHON=$(which python3)
-sudo make install-python PYTHON=$(which python3)
+# Install build dependencies
+sudo apt install -y cmake python3-dev cython3 python3-pil
+sudo pip3 install pillow --break-system-packages
+
+# Build and install Python bindings
+sudo pip3 install . --break-system-packages
 ```
 
 #### 4. Disable On-Board Sound (Important!)
