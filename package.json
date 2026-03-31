@@ -1,0 +1,17 @@
+{
+  "name": "ldw-web-form",
+  "version": "1.0.0",
+  "description": "ab ii it led matrix web input form",
+  "license": "GPL-3.0-only",
+  "author": "Viktoria Köhler",
+  "scripts": {
+    "dev": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch",
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "uuid": "^9.0.0",
+    "bad-words": "^3.0.4"
+  }
+}

@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Doto:wght@100..900&display=swap");
+@import url("https://api.fontshare.com/v2/css?f[]=array@400&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "DM Mono", monospace;
+  --font-doto: "Doto", sans-serif;
+  --font-array: "Array", sans-serif;
+}
+
+@layer components {
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    z-index: -1;
+    animation: fade 4s ease-in-out infinite;
+  }
+
+  @keyframes fade {
+    0%,
+    100% {
+      opacity: 0.1;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
+
+h1 {
+  text-rendering: optimizeLegibility;
+}

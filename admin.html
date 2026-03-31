@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED-Wand Admin</title>
+    <link rel="stylesheet" href="src/output.css">
+    <style>
+        body {
+            font-family: 'DM Mono', monospace;
+            background: #09090b;
+            color: #fafafa;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-family: 'Doto', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            background: #18181b;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #6366f1;
+        }
+        .stat-label {
+            font-size: 0.875rem;
+            color: #a1a1aa;
+        }
+        .section {
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #a1a1aa;
+        }
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .message-item {
+            background: #18181b;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .message-item.displayed {
+            opacity: 0.5;
+        }
+        .message-content {
+            flex: 1;
+        }
+        .message-text {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            word-break: break-word;
+        }
+        .message-meta {
+            font-size: 0.75rem;
+            color: #71717a;
+        }
+        .message-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .status-pending {
+            background: #365314;
+            color: #bef264;
+        }
+        .status-waiting {
+            background: #713f12;
+            color: #fde047;
+        }
+        .status-displayed {
+            background: #1e3a5f;
+            color: #93c5fd;
+        }
+        .countdown {
+            font-size: 0.75rem;
+            color: #fde047;
+            margin-left: 0.5rem;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.875rem;
+        }
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #4f46e5;
+        }
+        .btn-delete {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+        .btn-delete:hover {
+            background: #991b1b;
+        }
+        .btn-secondary {
+            background: #27272a;
+            color: #fafafa;
+        }
+        .btn-secondary:hover {
+            background: #3f3f46;
+        }
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #71717a;
+        }
+        .refresh-indicator {
+            font-size: 0.75rem;
+            color: #71717a;
+        }
+        .queue-position {
+            background: #6366f1;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        /* Login styles */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            text-align: center;
+        }
+        .login-box {
+            background: #18181b;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        .login-box h1 {
+            margin-bottom: 1.5rem;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border: 1px solid #3f3f46;
+            background: #09090b;
+            color: #fafafa;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+        .login-box input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        .login-box button {
+            width: 100%;
+        }
+        .login-error {
+            color: #f87171;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .header h1 {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="login-screen">
+        <div class="login-box">
+            <h1>LED-Wand Admin</h1>
+            <div class="login-error hidden" id="login-error">Falsches Passwort</div>
+            <form onsubmit="login(event)">
+                <input type="password" id="password" placeholder="Passwort" autofocus>
+                <button type="submit" class="btn btn-primary">Anmelden</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="container hidden" id="admin-screen">
+        <div class="header">
+            <h1>LED-Wand Moderation</h1>
+            <button class="btn btn-secondary" onclick="logout()">Abmelden</button>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="pending-count">-</div>
+                <div class="stat-label">In Warteschlange</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="displayed-count">-</div>
+                <div class="stat-label">Angezeigt</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="filtered-count">-</div>
+                <div class="stat-label">Gefiltert</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-secondary" onclick="loadMessages()">Aktualisieren</button>
+            <button class="btn btn-secondary" onclick="clearDisplayed()">Angezeigte löschen</button>
+            <span class="refresh-indicator">Auto-Refresh: 5s</span>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Warteschlange (Pending)</div>
+            <div class="message-list" id="pending-messages">
+                <div class="empty-state">Laden...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Bereits angezeigt</div>
+            <div class="message-list" id="displayed-messages">
+                <div class="empty-state">Laden...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = localStorage.getItem('adminToken');
+        let autoRefreshInterval;
+
+        // Check if already logged in
+        if (authToken) {
+            showAdminScreen();
+        }
+
+        async function login(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+
+            try {
+                const response = await fetch('/api/v1/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    authToken = data.token;
+                    localStorage.setItem('adminToken', authToken);
+                    errorEl.classList.add('hidden');
+                    showAdminScreen();
+                } else {
+                    errorEl.classList.remove('hidden');
+                    document.getElementById('password').value = '';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorEl.textContent = 'Verbindungsfehler';
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            fetch('/api/v1/admin/logout', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+
+            authToken = null;
+            localStorage.removeItem('adminToken');
+            clearInterval(autoRefreshInterval);
+
+            document.getElementById('admin-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('password').value = '';
+        }
+
+        function showAdminScreen() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-screen').classList.remove('hidden');
+            loadMessages();
+            autoRefreshInterval = setInterval(loadMessages, 5000);
+        }
+
+        async function loadMessages() {
+            try {
+                const response = await fetch('/api/v1/admin/messages', {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                const data = await response.json();
+
+                // Update stats
+                document.getElementById('pending-count').textContent = data.status.pendingMessages;
+                document.getElementById('displayed-count').textContent = data.status.displayedMessages;
+                document.getElementById('filtered-count').textContent = data.status.totalFiltered || 0;
+
+                // Split messages by status
+                const pending = data.messages.filter(m => m.status === 'pending');
+                const displayed = data.messages.filter(m => m.status === 'displayed');
+
+                // Render pending messages
+                renderMessages('pending-messages', pending, true);
+
+                // Render displayed messages (newest first)
+                renderMessages('displayed-messages', displayed.reverse(), false);
+
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        function renderMessages(containerId, messages, showPosition) {
+            const container = document.getElementById(containerId);
+
+            if (messages.length === 0) {
+                container.innerHTML = '<div class="empty-state">Keine Nachrichten</div>';
+                return;
+            }
+
+            container.innerHTML = messages.map(msg => {
+                let statusClass = 'status-displayed';
+                let statusText = 'Angezeigt';
+
+                if (msg.status === 'pending') {
+                    if (msg.isReady) {
+                        statusClass = 'status-pending';
+                        statusText = 'Bereit';
+                    } else {
+                        statusClass = 'status-waiting';
+                        statusText = 'Wartet';
+                    }
+                }
+
+                const countdown = msg.readyInMs > 0 ? `<span class="countdown">(${Math.ceil(msg.readyInMs / 1000)}s)</span>` : '';
+
+                return `
+                <div class="message-item ${msg.status === 'displayed' ? 'displayed' : ''}">
+                    <div class="message-content">
+                        <div class="message-text">
+                            ${showPosition && msg.queuePosition ? `<span class="queue-position">#${msg.queuePosition}</span>` : ''}
+                            ${escapeHtml(msg.text)}
+                        </div>
+                        <div class="message-meta">
+                            ${formatTime(msg.submittedAt)}
+                            ${msg.displayedAt ? ` | Angezeigt: ${formatTime(msg.displayedAt)}` : ''}
+                            ${msg.displayedBy ? ` (${msg.displayedBy})` : ''}
+                        </div>
+                    </div>
+                    <span class="message-status ${statusClass}">
+                        ${statusText}${countdown}
+                    </span>
+                    <button class="btn btn-delete" onclick="deleteMessage('${msg.id}')">Löschen</button>
+                </div>
+            `}).join('');
+        }
+
+        async function deleteMessage(messageId) {
+            if (!confirm('Diese Nachricht wirklich löschen?')) return;
+
+            try {
+                const response = await fetch(`/api/v1/admin/messages/${messageId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                if (response.ok) {
+                    loadMessages();
+                } else {
+                    alert('Fehler beim Löschen');
+                }
+            } catch (error) {
+                console.error('Error deleting message:', error);
+                alert('Fehler beim Löschen');
+            }
+        }
+
+        async function clearDisplayed() {
+            if (!confirm('Alle angezeigten Nachrichten löschen?')) return;
+
+            try {
+                const response = await fetch('/api/v1/admin/clear-displayed', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(`${data.removed} Nachrichten gelöscht`);
+                    loadMessages();
+                }
+            } catch (error) {
+                console.error('Error clearing displayed:', error);
+            }
+        }
+
+        function formatTime(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AB II IT</title>
+    <link rel="stylesheet" href="src/output.css" />
+  </head>
+
+  <body
+    class="mx-auto flex min-h-dvh max-w-md flex-col justify-between overflow-hidden bg-zinc-950 text-base text-stone-50">
+    <main
+      class="mx-4 my-auto flex flex-col items-start justify-center rounded-sm bg-zinc-50 p-5 font-mono text-base/5 text-stone-900">
+      <h1 class="mb-2 font-doto text-5xl font-bold">LED-Wand</h1>
+      <p id="textInhalt">
+        Sie können hier Text eingeben, der dann bei uns an der LED-Wand
+        angezeigt wird!
+      </p>
+      <form id="form" class="mt-10 w-full">
+        <input
+          type="text"
+          id="text"
+          class="text-heading placeholder:text-mono mb-3 block w-full border-b border-stone-400 px-1 py-1 text-sm transition-all placeholder:text-base/5 placeholder:text-zinc-400 focus:border-stone-800 focus:outline-0"
+          placeholder="Ihr Text..."
+          required/>
+        <button
+          type="submit"
+          class="box-border w-full border border-transparent bg-zinc-900 px-3 py-2 leading-5 text-white transition-all hover:bg-indigo-500 hover:shadow-md focus:ring-4 focus:ring-stone-50">
+          Senden
+        </button>
+      </form>
+    </main>
+    <script src="src/main.js"></script>
+  </body>
+</html>
