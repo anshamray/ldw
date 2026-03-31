@@ -26,11 +26,11 @@ apt install -y python3 python3-pip git python3-dev cython3
 
 echo "[3/5] Building rpi-rgb-led-matrix library..."
 if [ ! -d "$REAL_HOME/rpi-rgb-led-matrix" ]; then
-    sudo -u "$REAL_USER" git clone https://github.com/hzeller/rpi-rgb-led-matrix.git "$REAL_HOME/rpi-rgb-led-matrix"
+    sudo -u "$REAL_USER" git clone --branch master https://github.com/hzeller/rpi-rgb-led-matrix.git "$REAL_HOME/rpi-rgb-led-matrix"
 fi
 cd "$REAL_HOME/rpi-rgb-led-matrix"
-make -C bindings/python build PYTHON=$(which python3)
-make -C bindings/python install PYTHON=$(which python3)
+make build-python PYTHON=$(which python3)
+make install-python PYTHON=$(which python3)
 
 echo "[4/5] Installing Python dependencies..."
 cd "$(dirname "$0")"
