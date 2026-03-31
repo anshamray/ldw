@@ -5,6 +5,8 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 echo "=== LDW LED Display - Pi Setup ==="
 echo ""
 
@@ -32,8 +34,8 @@ cd "$REAL_HOME/rpi-rgb-led-matrix"
 pip3 install . --break-system-packages
 
 echo "[4/5] Installing Python dependencies..."
-cd "$(dirname "$0")"
-pip3 install -r requirements.txt
+cd "$SCRIPT_DIR"
+pip3 install -r requirements.txt --break-system-packages
 
 echo "[5/5] Disabling on-board audio (conflicts with LED GPIO)..."
 CONFIG_FILE="/boot/firmware/config.txt"
