@@ -29,8 +29,8 @@ if [ ! -d "$REAL_HOME/rpi-rgb-led-matrix" ]; then
     sudo -u "$REAL_USER" git clone https://github.com/hzeller/rpi-rgb-led-matrix.git "$REAL_HOME/rpi-rgb-led-matrix"
 fi
 cd "$REAL_HOME/rpi-rgb-led-matrix"
-make build-python PYTHON=$(which python3)
-make install-python PYTHON=$(which python3)
+make -C bindings/python build PYTHON=$(which python3)
+make -C bindings/python install PYTHON=$(which python3)
 
 echo "[4/5] Installing Python dependencies..."
 cd "$(dirname "$0")"
