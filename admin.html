@@ -5,260 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LED-Wand Admin</title>
     <link rel="stylesheet" href="src/output.css">
-    <style>
-        body {
-            font-family: 'DM Mono', monospace;
-            background: #09090b;
-            color: #fafafa;
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        h1 {
-            font-family: 'Doto', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        .stats {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        .stat-box {
-            background: #18181b;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #6366f1;
-        }
-        .stat-label {
-            font-size: 0.875rem;
-            color: #a1a1aa;
-        }
-        .section {
-            margin-bottom: 2rem;
-        }
-        .section-title {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            color: #a1a1aa;
-        }
-        .message-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .message-item {
-            background: #18181b;
-            padding: 1rem;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-        .message-item.displayed {
-            opacity: 0.5;
-        }
-        .message-content {
-            flex: 1;
-        }
-        .message-text {
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-            word-break: break-word;
-        }
-        .message-meta {
-            font-size: 0.75rem;
-            color: #71717a;
-        }
-        .message-status {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-        .status-pending {
-            background: #365314;
-            color: #bef264;
-        }
-        .status-waiting {
-            background: #713f12;
-            color: #fde047;
-        }
-        .status-displayed {
-            background: #1e3a5f;
-            color: #93c5fd;
-        }
-        .countdown {
-            font-size: 0.75rem;
-            color: #fde047;
-            margin-left: 0.5rem;
-        }
-        .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.875rem;
-        }
-        .btn-primary {
-            background: #6366f1;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #4f46e5;
-        }
-        .btn-delete {
-            background: #7f1d1d;
-            color: #fecaca;
-        }
-        .btn-delete:hover {
-            background: #991b1b;
-        }
-        .btn-secondary {
-            background: #27272a;
-            color: #fafafa;
-        }
-        .btn-secondary:hover {
-            background: #3f3f46;
-        }
-        .actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            align-items: center;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #71717a;
-        }
-        .refresh-indicator {
-            font-size: 0.75rem;
-            color: #71717a;
-        }
-        .queue-position {
-            background: #6366f1;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            margin-right: 0.5rem;
-        }
-        /* Login styles */
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            text-align: center;
-        }
-        .login-box {
-            background: #18181b;
-            padding: 2rem;
-            border-radius: 12px;
-        }
-        .login-box h1 {
-            margin-bottom: 1.5rem;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            border: 1px solid #3f3f46;
-            background: #09090b;
-            color: #fafafa;
-            font-family: inherit;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            box-sizing: border-box;
-        }
-        .login-box input:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
-        .login-box button {
-            width: 100%;
-        }
-        .login-error {
-            color: #f87171;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .header h1 {
-            margin-bottom: 0;
-        }
-    </style>
 </head>
-<body>
+<body class="min-h-dvh bg-zinc-950 font-mono text-base text-stone-50">
+
     <!-- Login Screen -->
-    <div class="login-container" id="login-screen">
-        <div class="login-box">
-            <h1>LED-Wand Admin</h1>
-            <div class="login-error hidden" id="login-error">Falsches Passwort</div>
+    <div class="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4" id="login-screen">
+        <div class="rounded-sm bg-zinc-50 p-5 text-stone-900">
+            <h1 class="mb-2 font-doto text-5xl font-bold">LED-Wand</h1>
+            <p class="mb-6 text-base/5">Admin-Bereich</p>
+            <div class="mb-3 hidden text-sm text-red-600" id="login-error">Falsches Passwort</div>
             <form onsubmit="login(event)">
-                <input type="password" id="password" placeholder="Passwort" autofocus>
-                <button type="submit" class="btn btn-primary">Anmelden</button>
+                <div class="relative mb-3">
+                    <input
+                        type="password"
+                        id="password"
+                        class="block w-full border-b border-stone-400 px-1 py-1 text-sm transition-all placeholder:text-base/5 placeholder:text-zinc-400 focus:border-stone-800 focus:outline-0"
+                        placeholder="Passwort..."
+                        autofocus>
+                    <button type="button" onclick="togglePassword()" class="absolute right-1 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-stone-800" tabindex="-1">
+                        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg id="eye-off-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
+                            <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+                <button
+                    type="submit"
+                    class="box-border w-full border border-transparent bg-zinc-900 px-3 py-2 leading-5 text-white transition-all hover:bg-indigo-500 hover:shadow-md focus:ring-4 focus:ring-stone-50">
+                    Anmelden
+                </button>
             </form>
         </div>
     </div>
 
     <!-- Admin Dashboard -->
-    <div class="container hidden" id="admin-screen">
-        <div class="header">
-            <h1>LED-Wand Moderation</h1>
-            <button class="btn btn-secondary" onclick="logout()">Abmelden</button>
-        </div>
-
-        <div class="stats" id="stats">
-            <div class="stat-box">
-                <div class="stat-number" id="pending-count">-</div>
-                <div class="stat-label">In Warteschlange</div>
+    <div class="mx-auto hidden max-w-3xl px-4 py-6" id="admin-screen">
+        <div class="mb-6 rounded-sm bg-zinc-50 p-5 text-stone-900">
+            <div class="flex items-center justify-between">
+                <h1 class="font-doto text-3xl font-bold">LED-Wand</h1>
+                <button onclick="logout()" class="border border-stone-300 px-3 py-1 text-sm transition-all hover:bg-stone-100">Abmelden</button>
             </div>
-            <div class="stat-box">
-                <div class="stat-number" id="displayed-count">-</div>
-                <div class="stat-label">Angezeigt</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="filtered-count">-</div>
-                <div class="stat-label">Gefiltert</div>
-            </div>
-        </div>
+            <p class="mt-1 text-sm text-zinc-500">Moderation</p>
 
-        <div class="actions">
-            <button class="btn btn-secondary" onclick="loadMessages()">Aktualisieren</button>
-            <button class="btn btn-secondary" onclick="clearDisplayed()">Angezeigte löschen</button>
-            <span class="refresh-indicator">Auto-Refresh: 5s</span>
-        </div>
+            <div class="mt-4 flex gap-4 text-center">
+                <div class="flex-1 rounded bg-zinc-100 p-3">
+                    <div class="font-doto text-2xl font-bold text-indigo-600" id="pending-count">-</div>
+                    <div class="text-xs text-zinc-500">Warteschlange</div>
+                </div>
+                <div class="flex-1 rounded bg-zinc-100 p-3">
+                    <div class="font-doto text-2xl font-bold text-indigo-600" id="displayed-count">-</div>
+                    <div class="text-xs text-zinc-500">Angezeigt</div>
+                </div>
+                <div class="flex-1 rounded bg-zinc-100 p-3">
+                    <div class="font-doto text-2xl font-bold text-indigo-600" id="filtered-count">-</div>
+                    <div class="text-xs text-zinc-500">Gefiltert</div>
+                </div>
+            </div>
 
-        <div class="section">
-            <div class="section-title">Warteschlange (Pending)</div>
-            <div class="message-list" id="pending-messages">
-                <div class="empty-state">Laden...</div>
+            <div class="mt-4 flex items-center gap-2">
+                <button onclick="loadMessages()" class="border border-stone-300 px-3 py-1 text-sm transition-all hover:bg-stone-100">Aktualisieren</button>
+                <button onclick="clearDisplayed()" class="border border-stone-300 px-3 py-1 text-sm transition-all hover:bg-stone-100">Angezeigte löschen</button>
+                <span class="ml-auto text-xs text-zinc-400">Auto-Refresh: 5s</span>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">Bereits angezeigt</div>
-            <div class="message-list" id="displayed-messages">
-                <div class="empty-state">Laden...</div>
+        <div class="mb-4">
+            <h2 class="mb-2 font-mono text-sm text-zinc-500">Warteschlange</h2>
+            <div class="flex flex-col gap-2" id="pending-messages">
+                <div class="rounded-sm bg-zinc-50/5 p-4 text-center text-sm text-zinc-500">Laden...</div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h2 class="mb-2 font-mono text-sm text-zinc-500">Bereits angezeigt</h2>
+            <div class="flex flex-col gap-2" id="displayed-messages">
+                <div class="rounded-sm bg-zinc-50/5 p-4 text-center text-sm text-zinc-500">Laden...</div>
             </div>
         </div>
     </div>
@@ -266,6 +92,21 @@
     <script>
         let authToken = localStorage.getItem('adminToken');
         let autoRefreshInterval;
+
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            const eyeOffIcon = document.getElementById('eye-off-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.classList.add('hidden');
+                eyeOffIcon.classList.remove('hidden');
+            } else {
+                input.type = 'password';
+                eyeIcon.classList.remove('hidden');
+                eyeOffIcon.classList.add('hidden');
+            }
+        }
 
         // Check if already logged in
         if (authToken) {
@@ -337,19 +178,14 @@
 
                 const data = await response.json();
 
-                // Update stats
                 document.getElementById('pending-count').textContent = data.status.pendingMessages;
                 document.getElementById('displayed-count').textContent = data.status.displayedMessages;
                 document.getElementById('filtered-count').textContent = data.status.totalFiltered || 0;
 
-                // Split messages by status
                 const pending = data.messages.filter(m => m.status === 'pending');
                 const displayed = data.messages.filter(m => m.status === 'displayed');
 
-                // Render pending messages
                 renderMessages('pending-messages', pending, true);
-
-                // Render displayed messages (newest first)
                 renderMessages('displayed-messages', displayed.reverse(), false);
 
             } catch (error) {
@@ -361,43 +197,43 @@
             const container = document.getElementById(containerId);
 
             if (messages.length === 0) {
-                container.innerHTML = '<div class="empty-state">Keine Nachrichten</div>';
+                container.innerHTML = '<div class="rounded-sm bg-zinc-50/5 p-4 text-center text-sm text-zinc-500">Keine Nachrichten</div>';
                 return;
             }
 
             container.innerHTML = messages.map(msg => {
-                let statusClass = 'status-displayed';
+                let statusClass = 'bg-blue-500/20 text-blue-300';
                 let statusText = 'Angezeigt';
 
                 if (msg.status === 'pending') {
                     if (msg.isReady) {
-                        statusClass = 'status-pending';
+                        statusClass = 'bg-green-500/20 text-green-300';
                         statusText = 'Bereit';
                     } else {
-                        statusClass = 'status-waiting';
+                        statusClass = 'bg-yellow-500/20 text-yellow-300';
                         statusText = 'Wartet';
                     }
                 }
 
-                const countdown = msg.readyInMs > 0 ? `<span class="countdown">(${Math.ceil(msg.readyInMs / 1000)}s)</span>` : '';
+                const countdown = msg.readyInMs > 0 ? `<span class="ml-1 text-yellow-300">(${Math.ceil(msg.readyInMs / 1000)}s)</span>` : '';
 
                 return `
-                <div class="message-item ${msg.status === 'displayed' ? 'displayed' : ''}">
-                    <div class="message-content">
-                        <div class="message-text">
-                            ${showPosition && msg.queuePosition ? `<span class="queue-position">#${msg.queuePosition}</span>` : ''}
+                <div class="flex items-center gap-3 rounded-sm bg-zinc-50/5 p-3 ${msg.status === 'displayed' ? 'opacity-50' : ''}">
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm break-words">
+                            ${showPosition && msg.queuePosition ? `<span class="mr-1 inline-block rounded bg-indigo-600 px-1.5 py-0.5 text-xs text-white">#${msg.queuePosition}</span>` : ''}
                             ${escapeHtml(msg.text)}
                         </div>
-                        <div class="message-meta">
+                        <div class="mt-1 text-xs text-zinc-500">
                             ${formatTime(msg.submittedAt)}
-                            ${msg.displayedAt ? ` | Angezeigt: ${formatTime(msg.displayedAt)}` : ''}
+                            ${msg.displayedAt ? ` · ${formatTime(msg.displayedAt)}` : ''}
                             ${msg.displayedBy ? ` (${msg.displayedBy})` : ''}
                         </div>
                     </div>
-                    <span class="message-status ${statusClass}">
+                    <span class="shrink-0 rounded px-2 py-0.5 text-xs uppercase ${statusClass}">
                         ${statusText}${countdown}
                     </span>
-                    <button class="btn btn-delete" onclick="deleteMessage('${msg.id}')">Löschen</button>
+                    <button onclick="deleteMessage('${msg.id}')" class="shrink-0 rounded bg-red-900/50 px-2 py-1 text-xs text-red-300 transition-all hover:bg-red-800">Löschen</button>
                 </div>
             `}).join('');
         }
