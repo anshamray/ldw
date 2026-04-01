@@ -62,12 +62,13 @@ class LEDDisplay:
         """Initialize the RGB LED matrix."""
         options = RGBMatrixOptions()
 
-        # Defaults for 8x 64x64 panels in 2 parallel chains of 4
+        # Defaults for 64x64 panels with Adafruit Bonnet on Pi 4
         options.rows = 64
         options.cols = 64
-        options.chain_length = 4
+        options.chain_length = 1
         options.parallel = 2
-        options.hardware_mapping = 'regular'
+        options.hardware_mapping = 'adafruit-hat'
+        options.gpio_slowdown = 4
 
         # Parse command line args for matrix options
         if args:
