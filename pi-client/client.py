@@ -65,8 +65,8 @@ class LEDDisplay:
         # Defaults for 64x64 panels with Adafruit Bonnet on Pi 4
         options.rows = 64
         options.cols = 64
-        options.chain_length = 1
-        options.parallel = 2
+        options.chain_length = 2
+        options.parallel = 1
         options.hardware_mapping = 'adafruit-hat'
         options.gpio_slowdown = 4
 
@@ -303,8 +303,8 @@ Server options (configure in config.py):
 LED Matrix options:
     --led-rows=N           Rows per panel (default: 64)
     --led-cols=N           Columns per panel (default: 64)
-    --led-chain=N          Number of chained panels (default: 4)
-    --led-parallel=N       Parallel chains (default: 2)
+    --led-chain=N          Number of chained panels (default: 2)
+    --led-parallel=N       Parallel chains (default: 1)
     --led-slowdown-gpio=N  GPIO slowdown (try 2-4 for Pi 4)
     --led-brightness=N     Brightness 1-100 (default: 100)
     --led-hardware-mapping=TYPE  Hardware mapping (regular, adafruit-hat, adafruit-hat-pwm)
