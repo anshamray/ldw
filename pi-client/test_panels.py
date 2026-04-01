@@ -46,7 +46,7 @@ for color, label in [((255,0,0), "RED"), ((0,255,0), "GREEN"), ((0,0,255), "BLUE
     for x in range(canvas.width):
         for y in range(canvas.height):
             canvas.SetPixel(x, y, *color)
-    canvas.SwapOnVSync(matrix)
+    canvas = matrix.SwapOnVSync(canvas)
     time.sleep(20)
 
 print("Done.")
