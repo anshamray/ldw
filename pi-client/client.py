@@ -67,7 +67,7 @@ class LEDDisplay:
         options.cols = 64
         options.chain_length = 2
         options.parallel = 1
-        options.hardware_mapping = 'adafruit-hat'
+        options.hardware_mapping = 'regular'
         options.gpio_slowdown = 4
 
         # Parse command line args for matrix options
