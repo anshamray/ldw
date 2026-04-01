@@ -10,33 +10,30 @@
 
     <!-- Login Screen -->
     <div class="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4" id="login-screen">
-        <div class="rounded-sm bg-zinc-50 p-5 text-stone-900">
-            <h1 class="mb-2 font-doto text-5xl font-bold">LED-Wand</h1>
-            <p class="mb-6 text-base/5">Admin-Bereich</p>
-            <div class="mb-3 hidden text-sm text-red-600" id="login-error">Falsches Passwort</div>
+        <div class="rounded-lg bg-zinc-900 p-8 text-center">
+            <h1 class="mb-6 font-doto text-4xl font-bold">LED-Wand Admin</h1>
+            <div class="mb-4 hidden text-sm text-red-400" id="login-error">Falsches Passwort</div>
             <form onsubmit="login(event)">
-                <div class="mb-3 flex items-center border-b border-stone-400 focus-within:border-stone-800">
+                <div class="relative mb-4">
                     <input
                         type="password"
                         id="password"
-                        class="w-full px-1 py-1 text-sm focus:outline-0 placeholder:text-base/5 placeholder:text-zinc-400"
-                        placeholder="Passwort..."
+                        class="w-full rounded-md border border-zinc-700 bg-zinc-950 px-4 py-3 text-base text-stone-50 placeholder:text-zinc-500 focus:border-indigo-500 focus:outline-0"
+                        placeholder="Passwort"
                         autofocus>
-                    <button type="button" onclick="togglePassword()" class="shrink-0 px-1 text-zinc-400 hover:text-stone-800" tabindex="-1">
-                        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300" tabindex="-1">
+                        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
-                        <svg id="eye-off-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg id="eye-off-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
                             <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
                             <line x1="1" y1="1" x2="23" y2="23"></line>
                         </svg>
                     </button>
                 </div>
-                <button
-                    type="submit"
-                    class="box-border w-full border border-transparent bg-zinc-900 px-3 py-2 leading-5 text-white transition-all hover:bg-indigo-500 hover:shadow-md focus:ring-4 focus:ring-stone-50">
+                <button type="submit" class="w-full rounded-md bg-indigo-600 px-4 py-3 font-semibold text-white transition-all hover:bg-indigo-500">
                     Anmelden
                 </button>
             </form>
@@ -44,47 +41,44 @@
     </div>
 
     <!-- Admin Dashboard -->
-    <div class="mx-auto hidden max-w-3xl px-4 py-6" id="admin-screen">
-        <div class="mb-6 rounded-sm bg-zinc-50 p-5 text-stone-900">
-            <div class="flex items-center justify-between">
-                <h1 class="font-doto text-3xl font-bold">LED-Wand</h1>
-                <button onclick="logout()" class="border border-stone-300 px-3 py-1 text-sm transition-all hover:bg-stone-100">Abmelden</button>
-            </div>
-            <p class="mt-1 text-sm text-zinc-500">Moderation</p>
+    <div class="mx-auto hidden max-w-4xl px-4 py-8" id="admin-screen">
+        <div class="mb-4 flex items-center justify-between">
+            <h1 class="font-doto text-3xl font-bold">LED-Wand Moderation</h1>
+            <button onclick="logout()" class="rounded-md bg-zinc-800 px-4 py-2 text-sm text-stone-50 transition-all hover:bg-zinc-700">Abmelden</button>
+        </div>
 
-            <div class="mt-4 flex gap-4 text-center">
-                <div class="flex-1 rounded bg-zinc-100 p-3">
-                    <div class="font-doto text-2xl font-bold text-indigo-600" id="pending-count">-</div>
-                    <div class="text-xs text-zinc-500">Warteschlange</div>
-                </div>
-                <div class="flex-1 rounded bg-zinc-100 p-3">
-                    <div class="font-doto text-2xl font-bold text-indigo-600" id="displayed-count">-</div>
-                    <div class="text-xs text-zinc-500">Angezeigt</div>
-                </div>
-                <div class="flex-1 rounded bg-zinc-100 p-3">
-                    <div class="font-doto text-2xl font-bold text-indigo-600" id="filtered-count">-</div>
-                    <div class="text-xs text-zinc-500">Gefiltert</div>
-                </div>
+        <div class="mb-6 flex flex-wrap gap-4">
+            <div class="rounded-lg bg-zinc-900 px-6 py-4 text-center">
+                <div class="font-doto text-3xl font-bold text-indigo-400" id="pending-count">-</div>
+                <div class="text-sm text-zinc-400">In Warteschlange</div>
             </div>
-
-            <div class="mt-4 flex items-center gap-2">
-                <button onclick="loadMessages()" class="border border-stone-300 px-3 py-1 text-sm transition-all hover:bg-stone-100">Aktualisieren</button>
-                <button onclick="clearDisplayed()" class="border border-stone-300 px-3 py-1 text-sm transition-all hover:bg-stone-100">Angezeigte löschen</button>
-                <span class="ml-auto text-xs text-zinc-400">Auto-Refresh: 5s</span>
+            <div class="rounded-lg bg-zinc-900 px-6 py-4 text-center">
+                <div class="font-doto text-3xl font-bold text-indigo-400" id="displayed-count">-</div>
+                <div class="text-sm text-zinc-400">Angezeigt</div>
+            </div>
+            <div class="rounded-lg bg-zinc-900 px-6 py-4 text-center">
+                <div class="font-doto text-3xl font-bold text-indigo-400" id="filtered-count">-</div>
+                <div class="text-sm text-zinc-400">Gefiltert</div>
             </div>
         </div>
 
-        <div class="mb-4">
-            <h2 class="mb-2 font-mono text-sm text-zinc-500">Warteschlange</h2>
+        <div class="mb-6 flex items-center gap-2">
+            <button onclick="loadMessages()" class="rounded-md bg-zinc-800 px-4 py-2 text-sm transition-all hover:bg-zinc-700">Aktualisieren</button>
+            <button onclick="clearDisplayed()" class="rounded-md bg-zinc-800 px-4 py-2 text-sm transition-all hover:bg-zinc-700">Angezeigte löschen</button>
+            <span class="ml-auto text-xs text-zinc-500">Auto-Refresh: 5s</span>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="mb-3 text-lg text-zinc-400">Warteschlange (Pending)</h2>
             <div class="flex flex-col gap-2" id="pending-messages">
-                <div class="rounded-sm bg-zinc-50/5 p-4 text-center text-sm text-zinc-500">Laden...</div>
+                <div class="rounded-lg bg-zinc-900 p-6 text-center text-zinc-500">Laden...</div>
             </div>
         </div>
 
-        <div class="mb-4">
-            <h2 class="mb-2 font-mono text-sm text-zinc-500">Bereits angezeigt</h2>
+        <div class="mb-8">
+            <h2 class="mb-3 text-lg text-zinc-400">Bereits angezeigt</h2>
             <div class="flex flex-col gap-2" id="displayed-messages">
-                <div class="rounded-sm bg-zinc-50/5 p-4 text-center text-sm text-zinc-500">Laden...</div>
+                <div class="rounded-lg bg-zinc-900 p-6 text-center text-zinc-500">Laden...</div>
             </div>
         </div>
     </div>
@@ -197,20 +191,20 @@
             const container = document.getElementById(containerId);
 
             if (messages.length === 0) {
-                container.innerHTML = '<div class="rounded-sm bg-zinc-50/5 p-4 text-center text-sm text-zinc-500">Keine Nachrichten</div>';
+                container.innerHTML = '<div class="rounded-lg bg-zinc-900 p-6 text-center text-zinc-500">Keine Nachrichten</div>';
                 return;
             }
 
             container.innerHTML = messages.map(msg => {
-                let statusClass = 'bg-blue-500/20 text-blue-300';
+                let statusClass = 'bg-blue-900/50 text-blue-300';
                 let statusText = 'Angezeigt';
 
                 if (msg.status === 'pending') {
                     if (msg.isReady) {
-                        statusClass = 'bg-green-500/20 text-green-300';
+                        statusClass = 'bg-green-900/50 text-green-300';
                         statusText = 'Bereit';
                     } else {
-                        statusClass = 'bg-yellow-500/20 text-yellow-300';
+                        statusClass = 'bg-yellow-900/50 text-yellow-300';
                         statusText = 'Wartet';
                     }
                 }
@@ -218,22 +212,22 @@
                 const countdown = msg.readyInMs > 0 ? `<span class="ml-1 text-yellow-300">(${Math.ceil(msg.readyInMs / 1000)}s)</span>` : '';
 
                 return `
-                <div class="flex items-center gap-3 rounded-sm bg-zinc-50/5 p-3 ${msg.status === 'displayed' ? 'opacity-50' : ''}">
-                    <div class="flex-1 min-w-0">
-                        <div class="text-sm break-words">
-                            ${showPosition && msg.queuePosition ? `<span class="mr-1 inline-block rounded bg-indigo-600 px-1.5 py-0.5 text-xs text-white">#${msg.queuePosition}</span>` : ''}
+                <div class="flex items-center gap-4 rounded-lg bg-zinc-900 p-4 ${msg.status === 'displayed' ? 'opacity-50' : ''}">
+                    <div class="min-w-0 flex-1">
+                        <div class="break-words">
+                            ${showPosition && msg.queuePosition ? `<span class="mr-2 inline-block rounded bg-indigo-600 px-2 py-0.5 text-xs text-white">#${msg.queuePosition}</span>` : ''}
                             ${escapeHtml(msg.text)}
                         </div>
                         <div class="mt-1 text-xs text-zinc-500">
                             ${formatTime(msg.submittedAt)}
-                            ${msg.displayedAt ? ` · ${formatTime(msg.displayedAt)}` : ''}
+                            ${msg.displayedAt ? ` | Angezeigt: ${formatTime(msg.displayedAt)}` : ''}
                             ${msg.displayedBy ? ` (${msg.displayedBy})` : ''}
                         </div>
                     </div>
-                    <span class="shrink-0 rounded px-2 py-0.5 text-xs uppercase ${statusClass}">
+                    <span class="shrink-0 rounded px-2 py-1 text-xs uppercase ${statusClass}">
                         ${statusText}${countdown}
                     </span>
-                    <button onclick="deleteMessage('${msg.id}')" class="shrink-0 rounded bg-red-900/50 px-2 py-1 text-xs text-red-300 transition-all hover:bg-red-800">Löschen</button>
+                    <button onclick="deleteMessage('${msg.id}')" class="shrink-0 rounded bg-red-900/80 px-3 py-1.5 text-xs text-red-200 transition-all hover:bg-red-800">Löschen</button>
                 </div>
             `}).join('');
         }
