@@ -96,14 +96,12 @@ class LEDDisplay:
                 elif arg.startswith('--led-pixel-mapper='):
                     options.pixel_mapper_config = arg.split('=')[1]
 
-        self.matrix = RGBMatrix(options=options)
-        self.canvas = self.matrix.CreateFrameCanvas()
-
-        # Total display dimensions
+        # Total display dimensions (compute before matrix init)
         self.width = options.cols * options.chain_length
         self.height = options.rows * options.parallel
 
-        # Load font sized for display height
+        # Load font BEFORE creating RGBMatrix — matrix drops root
+        # privileges after init, which blocks file access to /home/pi/
         self.font = graphics.Font()
         font_path = self._find_font()
         if font_path:
@@ -111,6 +109,9 @@ class LEDDisplay:
             log(f"Loaded font: {font_path}")
         else:
             log("WARNING: Could not find BDF font file")
+
+        self.matrix = RGBMatrix(options=options)
+        self.canvas = self.matrix.CreateFrameCanvas()
 
         # White text by default
         self.text_color = graphics.Color(255, 255, 255)
