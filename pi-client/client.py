@@ -146,7 +146,9 @@ class LEDDisplay:
         fallback = small_fonts if preferred is large_fonts else large_fonts
 
         for path in preferred + fallback:
-            if os.path.exists(path):
+            exists = os.path.exists(path)
+            log(f"  Font check: {path} -> {'FOUND' if exists else 'not found'}")
+            if exists:
                 return path
         return None
 
