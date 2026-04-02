@@ -124,18 +124,20 @@ class LEDDisplay:
         """Find a BDF font file. Prefers larger fonts for taller displays."""
         # For displays >= 64px tall, use a larger font
         large_fonts = [
+            "/home/pi/rpi-rgb-led-matrix/fonts/10x20.bdf",
+            "/root/rpi-rgb-led-matrix/fonts/10x20.bdf",
+            os.path.expanduser("~/rpi-rgb-led-matrix/fonts/10x20.bdf"),
             "/usr/share/fonts/misc/10x20.bdf",
             "/usr/share/fonts/X11/misc/10x20.bdf",
-            "/home/pi/rpi-rgb-led-matrix/fonts/10x20.bdf",
-            os.path.expanduser("~/rpi-rgb-led-matrix/fonts/10x20.bdf"),
             "../fonts/10x20.bdf",
             "fonts/10x20.bdf",
         ]
         small_fonts = [
+            "/home/pi/rpi-rgb-led-matrix/fonts/6x13.bdf",
+            "/root/rpi-rgb-led-matrix/fonts/6x13.bdf",
+            os.path.expanduser("~/rpi-rgb-led-matrix/fonts/6x13.bdf"),
             "/usr/share/fonts/misc/6x13.bdf",
             "/usr/share/fonts/X11/misc/6x13.bdf",
-            "/home/pi/rpi-rgb-led-matrix/fonts/6x13.bdf",
-            os.path.expanduser("~/rpi-rgb-led-matrix/fonts/6x13.bdf"),
             "../fonts/6x13.bdf",
             "fonts/6x13.bdf",
         ]
