@@ -122,26 +122,22 @@ class LEDDisplay:
 
     def _find_font(self):
         """Find a BDF font file. Prefers larger fonts for taller displays."""
-        import glob
+        import subprocess
         font_name = "10x20.bdf" if getattr(self, 'height', 64) >= 64 else "6x13.bdf"
         fallback_name = "6x13.bdf" if font_name == "10x20.bdf" else "10x20.bdf"
 
-        search_paths = [
-            f"/home/*/rpi-rgb-led-matrix/fonts/{font_name}",
-            f"/root/rpi-rgb-led-matrix/fonts/{font_name}",
-            f"/usr/share/fonts/misc/{font_name}",
-            f"/usr/share/fonts/X11/misc/{font_name}",
-            f"/home/*/rpi-rgb-led-matrix/fonts/{fallback_name}",
-            f"/root/rpi-rgb-led-matrix/fonts/{fallback_name}",
-            f"/usr/share/fonts/misc/{fallback_name}",
-            f"/usr/share/fonts/X11/misc/{fallback_name}",
-        ]
-
-        for pattern in search_paths:
-            matches = glob.glob(pattern)
-            if matches:
-                log(f"  Font found: {matches[0]}")
-                return matches[0]
+        for name in [font_name, fallback_name]:
+            try:
+                result = subprocess.run(
+                    ["find", "/home", "/root", "/usr/share/fonts", "-name", name, "-type", "f"],
+                    capture_output=True, text=True, timeout=5
+                )
+                if result.stdout.strip():
+                    path = result.stdout.strip().split('\n')[0]
+                    log(f"  Font found: {path}")
+                    return path
+            except Exception:
+                pass
         return None
 
     def scroll_text(self, text, scroll_speed=0.03):
