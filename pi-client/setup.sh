@@ -38,7 +38,19 @@ echo "[4/5] Installing Python dependencies..."
 cd "$SCRIPT_DIR"
 pip3 install -r requirements.txt --break-system-packages
 
-echo "[5/5] Disabling on-board audio (conflicts with LED GPIO)..."
+echo "[5/5] Copying fonts to pi-client directory..."
+FONTS_SRC="$REAL_HOME/rpi-rgb-led-matrix/fonts"
+FONTS_DST="$SCRIPT_DIR/fonts"
+if [ -d "$FONTS_SRC" ]; then
+    mkdir -p "$FONTS_DST"
+    cp "$FONTS_SRC"/*.bdf "$FONTS_DST/" 2>/dev/null || true
+    chown -R "$REAL_USER:$REAL_USER" "$FONTS_DST"
+    echo "  Copied BDF fonts to $FONTS_DST"
+else
+    echo "  WARNING: Font source not found at $FONTS_SRC"
+fi
+
+echo "[6/6] Disabling on-board audio (conflicts with LED GPIO)..."
 CONFIG_FILE="/boot/firmware/config.txt"
 if [ ! -f "$CONFIG_FILE" ]; then
     CONFIG_FILE="/boot/config.txt"

@@ -122,22 +122,50 @@ class LEDDisplay:
 
     def _find_font(self):
         """Find a BDF font file. Prefers larger fonts for taller displays."""
-        import subprocess
+        import os
         font_name = "10x20.bdf" if getattr(self, 'height', 64) >= 64 else "6x13.bdf"
-        fallback_name = "6x13.bdf" if font_name == "10x20.bdf" else "10x20.bdf"
 
-        for name in [font_name, fallback_name]:
-            try:
-                result = subprocess.run(
-                    ["find", "/home", "/root", "/usr/share/fonts", "-name", name, "-type", "f"],
-                    capture_output=True, text=True, timeout=5
-                )
-                if result.stdout.strip():
-                    path = result.stdout.strip().split('\n')[0]
-                    log(f"  Font found: {path}")
-                    return path
-            except Exception:
-                pass
+        # 0) Check relative to this script's directory (fonts/ subfolder or same dir)
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        local_paths = [
+            os.path.join(script_dir, "fonts", font_name),
+            os.path.join(script_dir, font_name),
+        ]
+        for p in local_paths:
+            log(f"  Checking local: {p} -> exists={os.path.exists(p)}")
+            if os.path.exists(p):
+                return p
+
+        # 1) Try well-known hardcoded paths
+        hardcoded = [
+            f"/home/pi/rpi-rgb-led-matrix/fonts/{font_name}",
+            f"/home/pi/rpi-rgb-led-matrix/fonts/6x13.bdf",
+            f"/home/pi/rpi-rgb-led-matrix/fonts/9x18.bdf",
+        ]
+        for p in hardcoded:
+            log(f"  Checking hardcoded: {p} -> exists={os.path.exists(p)}")
+            if os.path.exists(p):
+                return p
+
+        # 2) Use subprocess to find fonts (os.walk can miss things with sudo)
+        import subprocess
+        try:
+            result = subprocess.run(
+                ["find", "/home", "/usr", "-name", "*.bdf", "-type", "f"],
+                capture_output=True, text=True, timeout=10
+            )
+            lines = [l.strip() for l in result.stdout.strip().split('\n') if l.strip()]
+            log(f"  find returned {len(lines)} results: {lines[:5]}")
+            if lines:
+                # prefer the font_name if found
+                for l in lines:
+                    if l.endswith(font_name):
+                        return l
+                return lines[0]
+        except Exception as e:
+            log(f"  find error: {e}")
+
+        log("  No BDF font found anywhere")
         return None
 
     def scroll_text(self, text, scroll_speed=0.03):
