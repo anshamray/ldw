@@ -122,34 +122,26 @@ class LEDDisplay:
 
     def _find_font(self):
         """Find a BDF font file. Prefers larger fonts for taller displays."""
-        # For displays >= 64px tall, use a larger font
-        large_fonts = [
-            "/home/pi/rpi-rgb-led-matrix/fonts/10x20.bdf",
-            "/root/rpi-rgb-led-matrix/fonts/10x20.bdf",
-            os.path.expanduser("~/rpi-rgb-led-matrix/fonts/10x20.bdf"),
-            "/usr/share/fonts/misc/10x20.bdf",
-            "/usr/share/fonts/X11/misc/10x20.bdf",
-            "../fonts/10x20.bdf",
-            "fonts/10x20.bdf",
-        ]
-        small_fonts = [
-            "/home/pi/rpi-rgb-led-matrix/fonts/6x13.bdf",
-            "/root/rpi-rgb-led-matrix/fonts/6x13.bdf",
-            os.path.expanduser("~/rpi-rgb-led-matrix/fonts/6x13.bdf"),
-            "/usr/share/fonts/misc/6x13.bdf",
-            "/usr/share/fonts/X11/misc/6x13.bdf",
-            "../fonts/6x13.bdf",
-            "fonts/6x13.bdf",
+        import glob
+        font_name = "10x20.bdf" if getattr(self, 'height', 64) >= 64 else "6x13.bdf"
+        fallback_name = "6x13.bdf" if font_name == "10x20.bdf" else "10x20.bdf"
+
+        search_paths = [
+            f"/home/*/rpi-rgb-led-matrix/fonts/{font_name}",
+            f"/root/rpi-rgb-led-matrix/fonts/{font_name}",
+            f"/usr/share/fonts/misc/{font_name}",
+            f"/usr/share/fonts/X11/misc/{font_name}",
+            f"/home/*/rpi-rgb-led-matrix/fonts/{fallback_name}",
+            f"/root/rpi-rgb-led-matrix/fonts/{fallback_name}",
+            f"/usr/share/fonts/misc/{fallback_name}",
+            f"/usr/share/fonts/X11/misc/{fallback_name}",
         ]
 
-        preferred = large_fonts if getattr(self, 'height', 64) >= 64 else small_fonts
-        fallback = small_fonts if preferred is large_fonts else large_fonts
-
-        for path in preferred + fallback:
-            exists = os.path.exists(path)
-            log(f"  Font check: {path} -> {'FOUND' if exists else 'not found'}")
-            if exists:
-                return path
+        for pattern in search_paths:
+            matches = glob.glob(pattern)
+            if matches:
+                log(f"  Font found: {matches[0]}")
+                return matches[0]
         return None
 
     def scroll_text(self, text, scroll_speed=0.03):
