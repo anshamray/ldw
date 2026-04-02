@@ -1,50 +1,75 @@
 #!/usr/bin/env python3
-"""Quick test: fill all panels with color for 60 seconds.
+"""Brute-force test: cycles through all combinations of row-addr-type and multiplexing.
+
+Shows solid red for each combo for 4 seconds.
+Press Ctrl+C to stop when you see a solid fill (no stripes).
 
 Usage:
-  sudo python3 test_panels.py
-  sudo python3 test_panels.py --led-panel-type=FM6126A
-  sudo python3 test_panels.py --led-row-addr-type=1
-  sudo python3 test_panels.py --led-multiplexing=1
-  sudo python3 test_panels.py --led-chain=1
+  sudo python3 test_panels.py                    # runs brute-force test
+  sudo python3 test_panels.py --led-chain=2      # with extra flags
 """
 import sys
 import time
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 
-options = RGBMatrixOptions()
-options.rows = 64
-options.cols = 64
-options.chain_length = 2
-options.parallel = 1
-options.hardware_mapping = 'regular'
-options.gpio_slowdown = 4
+def make_options(row_addr_type=0, multiplexing=0, extra_args=None):
+    options = RGBMatrixOptions()
+    options.rows = 64
+    options.cols = 64
+    options.chain_length = 1
+    options.parallel = 1
+    options.hardware_mapping = 'regular'
+    options.gpio_slowdown = 4
+    options.row_address_type = row_addr_type
+    options.multiplexing = multiplexing
 
-# Parse extra flags
-for arg in sys.argv[1:]:
-    if arg.startswith('--led-panel-type='):
-        options.panel_type = arg.split('=')[1]
-    elif arg.startswith('--led-row-addr-type='):
-        options.row_address_type = int(arg.split('=')[1])
-    elif arg.startswith('--led-multiplexing='):
-        options.multiplexing = int(arg.split('=')[1])
-    elif arg.startswith('--led-chain='):
-        options.chain_length = int(arg.split('=')[1])
-    elif arg.startswith('--led-slowdown-gpio='):
-        options.gpio_slowdown = int(arg.split('=')[1])
-    elif arg.startswith('--led-rows='):
-        options.rows = int(arg.split('=')[1])
-    elif arg.startswith('--led-cols='):
-        options.cols = int(arg.split('=')[1])
+    if extra_args:
+        for arg in extra_args:
+            if arg.startswith('--led-chain='):
+                options.chain_length = int(arg.split('=')[1])
+            elif arg.startswith('--led-slowdown-gpio='):
+                options.gpio_slowdown = int(arg.split('=')[1])
+            elif arg.startswith('--led-rows='):
+                options.rows = int(arg.split('=')[1])
+            elif arg.startswith('--led-cols='):
+                options.cols = int(arg.split('=')[1])
+            elif arg.startswith('--led-panel-type='):
+                options.panel_type = arg.split('=')[1]
+            elif arg.startswith('--led-hardware-mapping='):
+                options.hardware_mapping = arg.split('=')[1]
+    return options
 
-print(f"Config: {options.cols}x{options.rows}, chain={options.chain_length}, parallel={options.parallel}")
-matrix = RGBMatrix(options=options)
+extra = sys.argv[1:]
 
-# Fill entire display with solid colors using Fill()
-for r, g, b, label in [(255,0,0,"RED"), (0,255,0,"GREEN"), (0,0,255,"BLUE")]:
-    print(f"{label} for 20s...")
-    matrix.Fill(r, g, b)
-    time.sleep(20)
+print("=" * 60)
+print("BRUTE-FORCE PANEL TEST")
+print("Testing all row-addr-type (0-5) x multiplexing (0-17)")
+print("Each combo shows RED for 4 seconds")
+print("Press Ctrl+C when you see SOLID RED (no stripes)")
+print("=" * 60)
 
-print("Done.")
-matrix.Clear()
+try:
+    for rat in range(6):
+        for mux in range(18):
+            label = f"row-addr-type={rat}, multiplexing={mux}"
+            print(f"\n>>> {label}")
+            try:
+                options = make_options(rat, mux, extra)
+                matrix = RGBMatrix(options=options)
+                matrix.Fill(255, 0, 0)
+                time.sleep(4)
+                matrix.Clear()
+                del matrix
+                time.sleep(0.5)
+            except Exception as e:
+                print(f"    ERROR: {e}")
+                time.sleep(0.5)
+except KeyboardInterrupt:
+    print(f"\n\nSTOPPED at: {label}")
+    print(f"Use these flags: --led-row-addr-type={rat} --led-multiplexing={mux}")
+    try:
+        matrix.Clear()
+    except:
+        pass
+
+print("\nDone.")
