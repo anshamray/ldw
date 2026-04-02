@@ -4,7 +4,7 @@
 # Examples:
 #   Local network: "http://192.168.1.100:3000"
 #   VPS:           "https://ldw.example.com"
-SERVER_URL = "http://localhost:3000"
+SERVER_URL = "http://172.16.155.51:3000"
 
 # Unique identifier for this display
 DISPLAY_ID = "pi-01"
